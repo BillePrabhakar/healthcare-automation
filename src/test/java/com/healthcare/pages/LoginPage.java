@@ -1,37 +1,38 @@
 package com.healthcare.pages;
 
+import java.time.Duration;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage {
 
     private WebDriver driver;
+    private WebDriverWait wait;
 
-    @FindBy(id = "username")
-    private WebElement username;
-
-    @FindBy(id = "password")
-    private WebElement password;
-
-    @FindBy(id = "login")
-    private WebElement loginButton;
+    private By username = By.id("txt-username");
+    private By password = By.id("txt-password");
+    private By loginButton = By.id("btn-login");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(driver, this);
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     public void enterUsername(String user) {
-        username.sendKeys(user);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(username))
+                .sendKeys(user);
     }
 
     public void enterPassword(String pass) {
-        password.sendKeys(pass);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(password))
+                .sendKeys(pass);
     }
 
     public void clickLogin() {
-        loginButton.click();
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton))
+                .click();
     }
 }

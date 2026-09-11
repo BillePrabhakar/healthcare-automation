@@ -4,10 +4,17 @@
 
 <suite name="Healthcare Automation Suite">
 
-    <test name="Healthcare Tests">
+    <test name="Healthcare Functional Tests">
+
         <classes>
+
             <class name="com.healthcare.tests.LoginTest"/>
+            <class name="com.healthcare.tests.InvalidLoginTest"/>
+            <class name="com.healthcare.tests.AppointmentTest"/>
+            <class name="com.healthcare.tests.LogoutTest"/>
+
         </classes>
+
     </test>
 
 </suite>

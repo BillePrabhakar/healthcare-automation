@@ -14,51 +14,57 @@ import org.slf4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class LoginTest extends BaseTest {
+public class InvalidLoginTest extends BaseTest {
 
     private static final Logger log = LogUtil.getLogger();
 
     @Test
-    public void validLoginTest() {
+    public void invalidLoginTest() {
 
-        log.info("========== VALID LOGIN TEST STARTED ==========");
+        log.info("========== INVALID LOGIN TEST STARTED ==========");
 
+        // Open CURA application
         driver.get("https://katalon-demo-cura.herokuapp.com/");
         log.info("CURA application opened");
 
+        // Click Make Appointment
         HomePage homePage = new HomePage(driver);
         homePage.clickMakeAppointment();
         log.info("Clicked Make Appointment");
 
+        // Enter invalid credentials
         LoginPage loginPage = new LoginPage(driver);
 
-        loginPage.enterUsername("John Doe");
-        log.info("Username entered");
+        loginPage.enterUsername("InvalidUser");
+        log.info("Invalid username entered");
 
-        loginPage.enterPassword("ThisIsNotAPassword");
-        log.info("Password entered");
+        loginPage.enterPassword("WrongPassword");
+        log.info("Invalid password entered");
 
         loginPage.clickLogin();
         log.info("Login button clicked");
 
+        // Wait for login error message
         WebDriverWait wait = new WebDriverWait(
                 driver,
                 Duration.ofSeconds(10)
         );
 
-        // Verify appointment page is displayed
-        boolean appointmentPageDisplayed = wait.until(
+        String errorMessage = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.id("combo_facility")
+                        By.cssSelector(".text-danger")
                 )
-        ).isDisplayed();
+        ).getText();
 
+        log.info("Login error message displayed: {}", errorMessage);
+
+        // Verify error message
         Assert.assertTrue(
-                appointmentPageDisplayed,
-                "Login was not successful"
+                errorMessage.contains("Login failed"),
+                "Invalid login message was not displayed"
         );
 
-        log.info("Login successful");
-        log.info("========== VALID LOGIN TEST PASSED ==========");
+        log.info("Invalid login validation successful");
+        log.info("========== INVALID LOGIN TEST PASSED ==========");
     }
 }
